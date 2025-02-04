@@ -187,6 +187,7 @@ class UserExpenseCategory(models.Model):
     _description = 'User Custom Expense Category'
 
     name = fields.Char(string="Category Name", required=True)
+    description = fields.Char(string="Category Description", required=False)
     user_id = fields.Many2one('res.users', string="User", required=True, default=lambda self: self.env.user)
 
 
@@ -209,7 +210,7 @@ class ExpenseRecord(models.Model):
     expense_id = fields.Many2one('easy_expenses.expense', string="Global Expense")
     user_expense_id = fields.Many2one('easy_expenses.user_expense', string="Custom Expense")
     amount = fields.Float(string="Amount", required=True)
-    date = fields.Date(string="Date", required=True, default=fields.Date.today)
+    date = fields.Datetime(string="Date", required=True, default=fields.Datetime.now)
     note = fields.Text(string="Note", help="Optional notes about the expense")
     user_id = fields.Many2one('res.users', string="User", default=lambda self: self.env.user, required=True)
 

@@ -1,0 +1,18 @@
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_easy_expenses_root" name="Easy Expenses" sequence="10"/>
+
+    <!-- Categories Menu -->
+    <menuitem id="menu_easy_expenses_category" name="Expense Categories" parent="menu_easy_expenses_root" sequence="20"/>
+    <menuitem id="menu_easy_expenses_category_list" name="Categories" parent="menu_easy_expenses_category" action="action_easy_expenses_category_list"/>
+    <menuitem id="menu_easy_expenses_user_category_list" name="User Categories" parent="menu_easy_expenses_category" action="action_easy_expenses_user_category_list"/>
+    
+    <!-- Expenses Menu -->
+    <menuitem id="menu_easy_expenses_expense" name="Expenses" parent="menu_easy_expenses_root" sequence="30"/>
+    <menuitem id="menu_easy_expenses_expense_list" name="Global Expenses" parent="menu_easy_expenses_expense" action="action_easy_expenses_expense_list"/>
+    <menuitem id="menu_easy_expenses_user_expense_list" name="User Expenses" parent="menu_easy_expenses_expense" action="action_easy_expenses_user_expense_list"/>
+    
+    <!-- Expense Records -->
+    <menuitem id="menu_easy_expenses_records" name="Expense Records" parent="menu_easy_expenses_root" sequence="40"/>
+    <menuitem id="menu_easy_expenses_record_list" name="Records" parent="menu_easy_expenses_records" action="action_easy_expenses_record_list"/>
+</odoo>

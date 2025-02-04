@@ -1,0 +1,36 @@
+<odoo>
+    <!-- List View for User Expense Categories -->
+    <record id="view_easy_expenses_user_category_list" model="ir.ui.view">
+        <field name="name">easy.expenses.user.category.list</field>
+        <field name="model">easy_expenses.user_category</field>
+        <field name="arch" type="xml">
+            <list string="User Expense Categories">
+                <field name="name"/>
+                <field name="description"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View for User Expense Categories -->
+    <record id="view_easy_expenses_user_category_form" model="ir.ui.view">
+        <field name="name">easy.expenses.user.category.form</field>
+        <field name="model">easy_expenses.user_category</field>
+        <field name="arch" type="xml">
+            <form string="User Expense Category">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View for User Expense Categories -->
+    <record id="action_easy_expenses_user_category_list" model="ir.actions.act_window">
+        <field name="name">User Expense Categories</field>
+        <field name="res_model">easy_expenses.user_category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -22,9 +22,13 @@ Long description of module's purpose
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        'security/ir.model.access.csv',  # Updated security rules
+        'views/category_views.xml',
+        'views/expense_views.xml',
+        'views/user_category_views.xml',
+        'views/user_expense_views.xml',
+        'views/record_views.xml',
+        'views/menus.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
