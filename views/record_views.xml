@@ -6,6 +6,9 @@
         <field name="arch" type="xml">
             <list string="Expense Records">
                 <field name="date"/>
+                <field name="category_type"/>
+                <field name="category_id"/>
+                <field name="user_category_id"/>
                 <field name="expense_id"/>
                 <field name="user_expense_id"/>
                 <field name="amount"/>
@@ -23,8 +26,18 @@
                 <sheet>
                     <group>
                         <field name="date"/>
-                        <field name="expense_id"/>
-                        <field name="user_expense_id"/>
+                        <field name="category_type"/>
+                        
+                        <!-- Global Category -->
+                        <field name="category_id" modifiers="{'invisible': [('category_type', '=', 'user')]}"/>
+                        <field name="expense_id" domain="[('category_id', '=', category_id)]" 
+                               modifiers="{'invisible': [('category_type', '=', 'user')]}"/>
+
+                        <!-- User Category -->
+                        <field name="user_category_id" modifiers="{'invisible': [('category_type', '=', 'global')]}"/>
+                        <field name="user_expense_id" domain="[('category_id', '=', user_category_id)]"
+                               modifiers="{'invisible': [('category_type', '=', 'global')]}"/>
+
                         <field name="amount"/>
                         <field name="user_id" readonly="1"/>
                     </group>
@@ -36,10 +49,10 @@
         </field>
     </record>
 
+    <!-- Action for Expense Records -->
     <record id="action_easy_expenses_record_list" model="ir.actions.act_window">
         <field name="name">Expense Records</field>
         <field name="res_model">easy_expenses.record</field>
         <field name="view_mode">list,form</field>
     </record>
-
 </odoo>

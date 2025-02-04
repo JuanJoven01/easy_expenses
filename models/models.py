@@ -209,18 +209,59 @@ class UserExpense(models.Model):
     user_id = fields.Many2one('res.users', string="User", required=True, default=lambda self: self.env.user)
 
 
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+
 class ExpenseRecord(models.Model):
     """Records of actual expenses"""
     _name = 'easy_expenses.record'
     _description = 'Expense Record'
     _order = 'date desc'
 
-    expense_id = fields.Many2one('easy_expenses.expense', string="Global Expense")
-    user_expense_id = fields.Many2one('easy_expenses.user_expense', string="Custom Expense")
+    category_type = fields.Selection(
+        [('global', 'Global Category'), ('user', 'User Category')],
+        string="Category Type",
+        required=True,
+        default='global'
+    )
+    category_id = fields.Many2one('easy_expenses.category', string="Global Category")
+    user_category_id = fields.Many2one('easy_expenses.user_category', string="User Category")
+    
+    expense_id = fields.Many2one(
+        'easy_expenses.expense',
+        string="Global Expense",
+        domain="[('category_id', '=', category_id)]"
+    )
+    user_expense_id = fields.Many2one(
+        'easy_expenses.user_expense',
+        string="Custom Expense",
+        domain="[('category_id', '=', user_category_id)]"
+    )
+
     amount = fields.Float(string="Amount", required=True)
     date = fields.Datetime(string="Date", required=True, default=fields.Datetime.now)
     note = fields.Text(string="Note", help="Optional notes about the expense")
     user_id = fields.Many2one('res.users', string="User", default=lambda self: self.env.user, required=True)
+
+    @api.onchange('category_type')
+    def _onchange_category_type(self):
+        """Reset category and expenses when switching category type"""
+        self.category_id = False
+        self.user_category_id = False
+        self.expense_id = False
+        self.user_expense_id = False
+
+    @api.onchange('category_id')
+    def _onchange_category_id(self):
+        """Clear expense_id when changing the global category"""
+        if self.category_type == 'global':
+            self.expense_id = False
+
+    @api.onchange('user_category_id')
+    def _onchange_user_category_id(self):
+        """Clear user_expense_id when changing the user category"""
+        if self.category_type == 'user':
+            self.user_expense_id = False
 
     @api.constrains('amount')
     def _check_amount(self):
@@ -228,3 +269,4 @@ class ExpenseRecord(models.Model):
         for record in self:
             if record.amount <= 0:
                 raise ValidationError("The expense amount must be greater than zero.")
+
