@@ -33,6 +33,10 @@ class ExpenseCategory(models.Model):
             existing_category = self.search([('name', '=', category['name'])], limit=1)
             if not existing_category:
                 self.create(category)
+    @api.model
+    def init(self):
+        """Ensure default categories are created on module installation."""
+        self.create_default_categories()
 
 
 class Expense(models.Model):
@@ -180,7 +184,11 @@ class Expense(models.Model):
             if category and not self.search([('name', '=', expense['name'])]):
                 self.create({'name': expense['name'], 'category_id': category.id})
 
-
+    @api.model
+    def init(self):
+        """Ensure default expenses are created on module installation."""
+        self.create_default_expenses()
+        
 class UserExpenseCategory(models.Model):
     """User-Created Expense Categories"""
     _name = 'easy_expenses.user_category'
