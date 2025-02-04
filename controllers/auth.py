@@ -21,7 +21,7 @@ class JWTAuth:
         payload = {
             'user_id': user.id,
             'login': user.login,
-            'exp': datetime.now(datetime.timezone.utc) + datetime.timedelta(days=7)
+            'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=7)
         }
         return jwt.encode(payload, JWTAuth.get_secret_key(), algorithm='HS256')
 
@@ -31,24 +31,26 @@ class JWTAuth:
         try:
             return jwt.decode(token, JWTAuth.get_secret_key(), algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AccessDenied("Token expired")
+            return None
         except jwt.InvalidTokenError:
-            raise AccessDenied("Invalid token")
+            return None
 
     @staticmethod
     def authenticate_request():
         """Middleware to verify JWT token in protected endpoints"""
         token = request.httprequest.headers.get('Authorization')
 
-        if not token or not token.startswith('Bearer '):
-            raise AccessDenied("Missing or invalid token")  # More specific exception
+        if not token:
+            raise AccessDenied("Missing Authorization Header")
+
+        if not token.startswith('Bearer '):
+            raise AccessDenied("Invalid Token Format. Use 'Bearer <token>'")
 
         token = token.split(' ')[1]  # Extract actual token
-
         decoded_token = JWTAuth.decode_token(token)
 
         if not decoded_token:
-            raise AccessDenied("Invalid or expired token")  # More specific exception
+            raise AccessDenied("Invalid or expired token")
 
         return decoded_token
 
@@ -63,13 +65,13 @@ class JWTAuthController(http.Controller):
         password = kwargs.get('password')
 
         if not login or not password:
-            return {"error": "Missing login or password"}
+            raise AccessDenied("Missing login or password")
 
         # Search for user in Odoo
         user = request.env['res.users'].sudo().search([('login', '=', login)], limit=1)
         
         if not user or not user._check_password(password) or not user.has_group('easy_apps.easy_apps_group'):
-            return {"error": "Invalid credentials"}
+            raise AccessDenied("Invalid credentials")
 
         # Generate JWT token
         token = JWTAuth.generate_token(user)
