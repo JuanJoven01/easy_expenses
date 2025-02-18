@@ -28,7 +28,7 @@ class UserExpenseCategoryAPI(http.Controller):
             return _http_error_response(f"Error getting user categories: {str(e)}", 500)
 
     ## 🔹 [POST] Create a New User Expense Category
-    @http.route('/api/easy_apps/user_categories/create', type='jsonrpc', auth='public', methods=['POST'], csrf=False)
+    @http.route('/api/easy_apps/user_categories/create', type='json', auth='public', methods=['POST'], csrf=False)
     def create_user_category(self, **kwargs):
         """Create a new user expense category (JWT required)"""
         try:
@@ -55,7 +55,7 @@ class UserExpenseCategoryAPI(http.Controller):
             return _http_error_response(f"Error creating user category: {str(e)}", 500)
 
     ## 🔹 [PUT] Update an Existing User Expense Category
-    @http.route('/api/easy_apps/user_categories/update/<int:category_id>', type='jsonrpc', auth='public', methods=['PUT'], csrf=False)
+    @http.route('/api/easy_apps/user_categories/update/<int:category_id>', type='json', auth='public', methods=['PUT'], csrf=False)
     def update_user_category(self, category_id, **kwargs):
         """Update an existing user expense category (JWT required)"""
         try:
@@ -82,7 +82,7 @@ class UserExpenseCategoryAPI(http.Controller):
             return _http_error_response(f"Error updating user category: {str(e)}", 500)
 
     ## 🔹 [DELETE] Delete a User Expense Category
-    @http.route('/api/easy_apps/user_categories/delete/<int:category_id>', type='jsonrpc', auth='public', methods=['DELETE'], csrf=False)
+    @http.route('/api/easy_apps/user_categories/delete/<int:category_id>', type='json', auth='public', methods=['DELETE'], csrf=False)
     def delete_user_category(self, category_id, **kwargs):
         """Delete a user expense category (JWT required)"""
         try:

@@ -34,7 +34,7 @@ class UserExpenseAPI(http.Controller):
             return _http_error_response(f"Error getting user expenses: {str(e)}", 500)
 
     ## 🔹 [POST] Create a User Expense
-    @http.route('/api/easy_apps/user_expenses/create', type='jsonrpc', auth='public', methods=['POST'], csrf=False)
+    @http.route('/api/easy_apps/user_expenses/create', type='json', auth='public', methods=['POST'], csrf=False)
     def create_user_expense(self, **kwargs):
         """Create a new user expense (JWT required)"""
         try:
@@ -66,7 +66,7 @@ class UserExpenseAPI(http.Controller):
             return _http_error_response(f"Error creating user expense: {str(e)}", 500)
 
     ## 🔹 [PUT] Update a User Expense
-    @http.route('/api/easy_apps/user_expenses/update/<int:expense_id>', type='jsonrpc', auth='public', methods=['PUT'], csrf=False)
+    @http.route('/api/easy_apps/user_expenses/update/<int:expense_id>', type='json', auth='public', methods=['PUT'], csrf=False)
     def update_user_expense(self, expense_id, **kwargs):
         """Update an existing user expense (JWT required)"""
         try:
@@ -97,7 +97,7 @@ class UserExpenseAPI(http.Controller):
             return _http_error_response(f"Error updating user expense: {str(e)}", 500)
 
     ## 🔹 [DELETE] Delete a User Expense
-    @http.route('/api/easy_apps/user_expenses/delete/<int:expense_id>', type='jsonrpc', auth='public', methods=['DELETE'], csrf=False)
+    @http.route('/api/easy_apps/user_expenses/delete/<int:expense_id>', type='json', auth='public', methods=['DELETE'], csrf=False)
     def delete_user_expense(self, expense_id, **kwargs):
         """Delete a user expense (JWT required)"""
         try:
